@@ -56,27 +56,18 @@ const ProfileData: React.FC<Props> = ({
 						<span>{company}</span>
 					</li>
 				)}
-			</Column>
-
-			<Column>
 				{location && (
 					<li>
 						<LocationIcon />
 						<span>{location}</span>
 					</li>
 				)}
-			</Column>
-
-			<Column>
 				{email && (
 					<li>
 						<EmailIcon />
 						<span>{email}</span>
 					</li>
 				)}
-			</Column>
-
-			<Column>
 				{blog && (
 					<li>
 						<BlogIcon />

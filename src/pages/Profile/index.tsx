@@ -15,10 +15,10 @@ const Profile: React.FC = () => {
 						avatarUrl={"https://avatars1.githubusercontent.com/u/8212327?s=400&u=897e9f7b525699ef4def7ddf31b845137a02f1d1&v=4"}
 						followers={56}
 						following={98}
-						company={"Guiabolso"}
-						location={"São Bernardo, Brasil"}
+						company={"@Guiabolso"}
+						location={"São Bernardo do Campo, Brasil"}
 						email={"email"}
-						blog={"carolineandrade.netlify.com.br"}
+						blog={"http://carolineandrade.netlify.com"}
 					/>
 				</LeftSide>
 				<RightSide></RightSide>
