@@ -1,8 +1,9 @@
 import React from "react";
 
-import { Container, Main, LeftSide, RightSide } from "./styles";
+import { Container, Main, LeftSide, RightSide, Repos } from "./styles";
 
 import ProfileData from "../../components/ProfileData";
+import RepoCard from "../../components/RepoCard";
 
 const Profile: React.FC = () => {
 	return (
@@ -21,7 +22,25 @@ const Profile: React.FC = () => {
 						blog={"http://carolineandrade.netlify.com"}
 					/>
 				</LeftSide>
-				<RightSide></RightSide>
+				<RightSide>
+					<Repos>
+						<h2>Random Repos</h2>
+
+						<div>
+							{[ 1, 2, 3, 4, 5, 6].map(n => {
+								return <RepoCard
+									key={n}
+									username={"carol"}
+									reponame={"repo1"}
+									description={"Legal"}
+									language={n % 3 == 0 ? "Javascript" : "Typescript"} 
+									stars={8}
+									forks={1}
+								/>
+							})}
+						</div>
+					</Repos>					
+				</RightSide>
 			</Main>
 		</Container>
 	);
