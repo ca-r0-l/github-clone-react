@@ -33,7 +33,7 @@ const Profile: React.FC = () => {
 									username={"carol"}
 									reponame={"repo1"}
 									description={"Legal"}
-									language={n % 3 == 0 ? "Javascript" : "Typescript"} 
+									language={n % 3 === 0 ? "Javascript" : "Typescript"} 
 									stars={8}
 									forks={1}
 								/>
