@@ -1,18 +1,60 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import { Container, Main, LeftSide, RightSide, Repos, CalendarHeading, RepoIcon, Tab } from "./styles";
 
 import ProfileData from "../../components/ProfileData";
 import RepoCard from "../../components/RepoCard";
 import RandomCalendar from "../../components/RandomCalendar";
+import { URL_GITHUB } from "../../App";
+import { APIUser, APIRepo } from "../../@types/index";
+
+interface Data {
+	user?: APIUser;
+	repos?: Array<APIRepo>;
+	error?: string;
+}
 
 const Profile: React.FC = () => {
+	const { username = "ca-r0-l" } = useParams();
+	const [data, setData] = useState<Data>();
+
+	useEffect(() => {
+		Promise.all([
+			fetch(`${URL_GITHUB}/users/${username}`),
+			fetch(`${URL_GITHUB}/users/${username}/repos`)
+		]).then(async res => {
+			const [userResponse, reposResponse] = res;
+
+			if (userResponse.status === 404) {
+				setData({ error: "User not found" });
+				return;
+			}
+
+			const user = await userResponse.json();
+			const repos = await reposResponse.json();
+
+			setData({
+				user,
+				repos
+			})
+
+		});
+	}, [username]);
+
+	if (data?.error) {
+		return <h1>{data.error}</h1>
+	}
+
+	if (!data?.user || !data?.repos) {
+		return <h1>Loading...</h1>;
+	}
 
 	const TabContent = () => (
 		<div className="content">
 			<RepoIcon />
 			<span className="label">Repositories</span>
-			<span className="number">50</span>
+			<span className="number">{data?.user?.public_repos}</span>
 		</div>
 	);
 
@@ -30,15 +72,15 @@ const Profile: React.FC = () => {
 			<Main>
 				<LeftSide>
 					<ProfileData
-						username={"carol"}
-						name={"Caroline Ribeiro"}
-						avatarUrl={"https://avatars1.githubusercontent.com/u/8212327?s=400&u=897e9f7b525699ef4def7ddf31b845137a02f1d1&v=4"}
-						followers={56}
-						following={98}
-						company={"@Guiabolso"}
-						location={"São Bernardo do Campo, Brasil"}
-						email={"email"}
-						blog={"http://carolineandrade.netlify.com"}
+						username={data.user.login}
+						name={data.user.name}
+						avatarUrl={data.user.avatar_url}
+						followers={data.user.followers}
+						following={data.user.following}
+						company={data.user?.company}
+						location={data.user?.location}
+						email={data.user?.email}
+						blog={data.user?.blog}
 					/>
 				</LeftSide>
 				<RightSide>
@@ -51,15 +93,15 @@ const Profile: React.FC = () => {
 						<h2>Random Repos</h2>
 
 						<div>
-							{[ 1, 2, 3, 4, 5, 6].map(n => {
+							{data.repos.map(item => {
 								return <RepoCard
-									key={n}
-									username={"carol"}
-									reponame={"repo1"}
-									description={"Legal"}
-									language={n % 3 === 0 ? "Javascript" : "Typescript"} 
-									stars={8}
-									forks={1}
+									key={item.name}
+									username={item.owner.login}
+									reponame={item.name}
+									description={item.description}
+									language={item.language} 
+									stars={item.stargazers_count}
+									forks={item.forks}
 								/>
 							})}
 						</div>

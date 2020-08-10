@@ -8,6 +8,8 @@ import Header from './components/Header';
 import Profile from './pages/Profile';
 import Repo from './pages/Repo';
 
+export const URL_GITHUB = "https://api.github.com";
+
 function App() {
 	return (
 		<BrowserRouter>
