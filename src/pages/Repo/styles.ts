@@ -76,7 +76,7 @@ export const ForkIcon = styled(AiOutlineFork)`${iconCSS}`;
 
 export const LinkButton = styled.a`
     margin-top: 24px;
-    background: var(---gray-dark);
+    background: var(--gray-dark);
     padding: 12px 17px;
     border-radius: 24px;
     width: max-content;
@@ -89,7 +89,8 @@ export const LinkButton = styled.a`
     }
 
     > svg { 
-        
+        fill: var(--primary);
+        margin-right: 10px;
     }
 `;
 
