@@ -1,44 +1,74 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 
 import { Container, Breadcrumb, RepoIcon, Stats, StarIcon, ForkIcon, LinkButton, GithubIcon } from "./styles";
+import { APIRepo } from "../../@types/index";
+import { URL_GITHUB } from "../../App";
 
-import { Link } from "react-router-dom";
 
+interface Data {
+	repo?: APIRepo;
+	error?: string;
+}
+  
 const Repo: React.FC = () => {
+	const { username, reponame } = useParams();
+	const [data, setData] = useState<Data>();
+  
+	useEffect(() => {
+	  fetch(`${URL_GITHUB}/repos/${username}/${reponame}`).then(
+		async (response) => {
+		  setData(
+			response.status === 404
+			  ? { error: 'Repository not found!' }
+			  : { repo: await response.json() }
+		  );
+		}
+	  );
+	}, [reponame, username]);
+  
+	if (data?.error) {
+	  return <h1>{data.error}</h1>;
+	}
+  
+	if (!data?.repo) {
+	  return <h1>Loading...</h1>;
+	}
+  
 	return (
 		<Container>
 			<Breadcrumb>
 				<RepoIcon />
 
-				<Link className={"username"} to={"/ca-r0-l"}>
-					ca-r0-l
+				<Link className={"username"} to={`/${data.repo.owner.login}`}>
+					{data.repo.owner.login}
 				</Link>
 				<span>/</span>
 
 				<Link
 					className={"reponame"}
-					to={"/ca-r0-l/gerenciador-produtos-sql-koa"}
+					to={`/${data.repo.owner.login}/${data.repo.name}`}
 				>
-					gerenciador-produtos-sql-koa
+					{data.repo.name}
 				</Link>
 			</Breadcrumb>
 
-			<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+			<p>{data.repo.description}</p>
 
 			<Stats>
 				<li>
 					<StarIcon />
-					<b>9</b>
+					<b>{data.repo.stargazers_count}</b>
 					<span>stars</span>
 				</li>
 				<li>
 					<ForkIcon />
-					<b>0</b>
+					<b>{data.repo.forks}</b>
 					<span>forks</span>
 				</li>
 			</Stats>
 
-			<LinkButton href={"https://github.com/ca-r0-l/gerenciador-produtos-sql-koa"}>
+			<LinkButton href={data.repo.html_url}>
 				<GithubIcon />
 				<span>View on Github</span>
 			</LinkButton>
