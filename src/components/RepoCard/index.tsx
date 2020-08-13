@@ -21,7 +21,7 @@ const RepoCard: React.FC<Props> = ({
     forks
 }) => {
 
-    const languageClass = language ? language.toLowerCase() : 'other';
+    const languageClass = language ? language.toLowerCase() : 'other-language';
 
     return (
         <Container>
